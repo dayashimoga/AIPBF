@@ -54,7 +54,7 @@ if not !TARGET_REPO!=="" (
         (
         echo #!/usr/bin/env bash
         echo python tools/project_brain/project_brain.py --scan
-        echo git add AI_BRAIN/PROJECT_BRAIN.md CODE_UNDERSTANDING.md AI_CONTEXT_PACKAGE.md
+        echo git add AI_BRAIN/PROJECT_BRAIN.md
         ) > "!TARGET_REPO!\.git\hooks\pre-commit"
         echo [Install] Pre-commit hook successfully established!
     )
@@ -71,7 +71,7 @@ if not !TARGET_REPO!=="" (
         (
         echo #!/usr/bin/env bash
         echo python project_brain.py --scan
-        echo git add AI_BRAIN/PROJECT_BRAIN.md CODE_UNDERSTANDING.md AI_CONTEXT_PACKAGE.md
+        echo git add AI_BRAIN/PROJECT_BRAIN.md
         ) > "%SCRIPT_DIR%.git\hooks\pre-commit"
         echo [Install] Pre-commit hook successfully established!
     )

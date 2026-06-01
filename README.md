@@ -13,16 +13,8 @@
 
 - 🚫 **No Fabrications (Evidence-First)**: Never guesses. Displays `UNKNOWN` / `NOT_AVAILABLE` when concrete file/log evidence is absent (e.g., missing coverage or test metrics).
 - 🏷️ **Fact Classification**: Appends `Verification: VERIFIED | INFERRED | ASSUMED` status to all codebase entities.
-- 📂 **Produces 9 Essential Outputs** under `/AI_BRAIN`:
-  1. `PROJECT_BRAIN.md`: The master index with 22 structured repository views.
-  2. `AI_CONTEXT.md`: LLM-optimized project onboarding & state restorer.
-  3. `PROJECT_STATUS.md`: Current build status, test coverage, and sprint telemetry.
-  4. `PROJECT_GAPS.md`: Factual matrix of missing requirements, tests, and security controls.
-  5. `PROJECT_SECURITY.md`: Security analysis (CVEs, exposed secrets, auth models).
-  6. `PROJECT_TESTING.md`: Complete coverage matrices and test runner results.
-  7. `PROJECT_ARCHITECTURE.md`: Subsystems, dependency maps, and boot flow sequence.
-  8. `REQUIREMENTS_TRACEABILITY.md`: Dynamic trace map connecting specification IDs to implementation lines.
-  9. `IMPLEMENTATION_INTELLIGENCE.md`: Module boundaries and single source of truth files.
+- 📂 **Produces One Comprehensive Master Brain** under `/AI_BRAIN`:
+  - `PROJECT_BRAIN.md`: An all-in-one authoritative Markdown operating manual with 25 highly structured sections (Executive Summary, Runtime Boot Flows, Domain Models, Event Message Catalogs, Heuristic Security Audits, and Requirements Traceability matrices).
 - 🛡️ **Self-Healing Quality Gate**: Scans its own analysis output for contradictions, duplicate entries, or vendor code bleed, auto-healing the metadata before compilation.
 
 ---
@@ -60,7 +52,7 @@ install.bat --target C:\path\to\your\target\repo
 
 *What the installer does:*
 1. Bootstraps a local `tools/project_brain/` folder in the target repository.
-2. Performs an initial crawl and generates the 9 markdown guides.
+2. Performs an initial crawl and generates the master project brain operating manual.
 3. Automatically sets up a Git `pre-commit` hook to update the brain on every commit.
 
 ---
@@ -93,22 +85,14 @@ docker run --rm -v "%cd%:/workspace" project-brain --scan --path /workspace
 
 ---
 
-## 📊 Output Registries
+## 📊 Output Registry
 
-All outputs are saved cleanly under the `/AI_BRAIN/` directory in the root of your workspace:
+The master project brain is saved cleanly under the `/AI_BRAIN/` directory in the root of your workspace:
 
 ```
 target_project/
   └── AI_BRAIN/
-        ├── PROJECT_BRAIN.md             # Master Architecture Index
-        ├── AI_CONTEXT.md                # LLM-Ready Context Restorer
-        ├── PROJECT_STATUS.md            # Factual Sprint & Build Status
-        ├── PROJECT_GAPS.md              # Missing Tests & Code Requirements
-        ├── PROJECT_SECURITY.md          # Security Posture Card
-        ├── PROJECT_TESTING.md           # Factual Coverage Matrix
-        ├── PROJECT_ARCHITECTURE.md      # Dependency Graph & Boot Sequence
-        ├── REQUIREMENTS_TRACEABILITY.md # Spec ID mapping
-        └── IMPLEMENTATION_INTELLIGENCE.md# Subsystem Boundaries & Single Source of Truth
+        └── PROJECT_BRAIN.md             # Master Project Brain & Operating Manual
 ```
 
 ---

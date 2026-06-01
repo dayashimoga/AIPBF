@@ -85,7 +85,7 @@ if [ -n "${TARGET_REPO}" ]; then
 #!/usr/bin/env bash
 # AIPBF Pre-Commit Auto-Sync Hook
 python3 tools/project_brain/project_brain.py --scan
-git add AI_BRAIN/PROJECT_BRAIN.md CODE_UNDERSTANDING.md AI_CONTEXT_PACKAGE.md
+git add AI_BRAIN/PROJECT_BRAIN.md
 EOF
         chmod +x "${HOOK_FILE}"
         echo "[Install] Pre-commit hook successfully established!"
@@ -107,7 +107,7 @@ else
 #!/usr/bin/env bash
 # AIPBF Pre-Commit Auto-Sync Hook
 python3 project_brain.py --scan
-git add AI_BRAIN/PROJECT_BRAIN.md CODE_UNDERSTANDING.md AI_CONTEXT_PACKAGE.md
+git add AI_BRAIN/PROJECT_BRAIN.md
 EOF
         chmod +x "${HOOK_FILE}"
         echo "[Install] Pre-commit hook successfully established!"
