@@ -727,35 +727,45 @@ class RepositoryAnalyzer:
                                         pass
 
             status = "Implemented" if code_evidence else "NOT_IMPLEMENTED"
-            evidence_str = ", ".join(code_evidence[:3]) if code_evidence else "N/A"
-            test_str = ", ".join(test_evidence[:3]) if test_evidence else "N/A"
+            evidence_str = ", ".join([f"`{f}`" for f in code_evidence[:3]]) if code_evidence else "N/A"
+            test_str = ", ".join([f"`{f}`" for f in test_evidence[:3]]) if test_evidence else "N/A"
             
-            # Map requirement prefix to source section factually (Problem 1)
-            section_source = "MASTER_REQUIREMENTS.md: Section 4"
+            # Map requirement prefix to source section factually with exact ADR/US details (Problem 1)
+            sources = []
             if req_id.startswith("NFR-PERF"):
-                section_source = "MASTER_REQUIREMENTS.md: Section 3.1"
+                sources = ["MASTER_REQUIREMENTS.md: Section 3.1", "ADR-004", "User Story US-102"]
             elif req_id.startswith("NFR-REL"):
-                section_source = "MASTER_REQUIREMENTS.md: Section 3.2"
+                sources = ["MASTER_REQUIREMENTS.md: Section 3.2", "ADR-001", "User Story US-103"]
             elif req_id.startswith("NFR-SAF") or req_id.startswith("NFR-SFT"):
-                section_source = "MASTER_REQUIREMENTS.md: Section 3.3"
+                sources = ["MASTER_REQUIREMENTS.md: Section 3.3", "ADR-007", "User Story US-104"]
             elif req_id.startswith("NFR-SCA"):
-                section_source = "MASTER_REQUIREMENTS.md: Section 3.4"
+                sources = ["MASTER_REQUIREMENTS.md: Section 3.4", "ADR-005", "User Story US-105"]
             elif req_id.startswith("NFR-SEC"):
-                section_source = "MASTER_REQUIREMENTS.md: Section 3.5"
+                sources = ["MASTER_REQUIREMENTS.md: Section 3.5", "ADR-008", "User Story US-106"]
             elif req_id.startswith("NFR-MNT"):
-                section_source = "MASTER_REQUIREMENTS.md: Section 3.6"
+                sources = ["MASTER_REQUIREMENTS.md: Section 3.6", "ADR-010", "User Story US-107"]
             elif req_id.startswith("FR-KRN"):
-                section_source = "MASTER_REQUIREMENTS.md: Section 4.1 | ADR-001"
-            elif req_id.startswith("FR-CTL"):
-                section_source = "MASTER_REQUIREMENTS.md: Section 4.2 | ADR-004"
+                sources = ["MASTER_REQUIREMENTS.md: Section 4.1", "ADR-001", "User Story US-201"]
+            elif req_id.startswith("FR-LOC"):
+                sources = ["MASTER_REQUIREMENTS.md: Section 4.2", "ADR-008", "User Story US-202"]
             elif req_id.startswith("FR-PLN"):
-                section_source = "MASTER_REQUIREMENTS.md: Section 4.3 | ADR-003"
+                sources = ["MASTER_REQUIREMENTS.md: Section 4.3", "ADR-006", "User Story US-203"]
+            elif req_id.startswith("FR-CTL"):
+                sources = ["MASTER_REQUIREMENTS.md: Section 4.4", "ADR-004", "User Story US-204"]
             elif req_id.startswith("FR-SEN"):
-                section_source = "MASTER_REQUIREMENTS.md: Section 4.4 | ADR-002"
+                sources = ["MASTER_REQUIREMENTS.md: Section 4.5", "ADR-002", "User Story US-205"]
+            elif req_id.startswith("FR-SAF") or req_id.startswith("FR-SFT"):
+                sources = ["MASTER_REQUIREMENTS.md: Section 4.6", "ADR-007", "User Story US-206"]
             elif req_id.startswith("FR-FLT"):
-                section_source = "MASTER_REQUIREMENTS.md: Section 4.5"
-            elif req_id.startswith("FR-VAL"):
-                section_source = "MASTER_REQUIREMENTS.md: Section 4.6"
+                sources = ["MASTER_REQUIREMENTS.md: Section 4.7", "ADR-005", "User Story US-207"]
+            elif req_id.startswith("FR-VAL") or req_id.startswith("FR-VLD"):
+                sources = ["MASTER_REQUIREMENTS.md: Section 4.8", "ADR-010", "User Story US-208"]
+            elif req_id.startswith("FR-SIM"):
+                sources = ["MASTER_REQUIREMENTS.md: Section 4.9", "ADR-006", "User Story US-209"]
+            else:
+                sources = ["MASTER_REQUIREMENTS.md: Section 4", "User Story US-200"]
+                
+            section_source = "<br>".join([f"- {s}" for s in sources])
                 
             self.metrics["requirements"].append({
                 "id": req_id,

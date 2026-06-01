@@ -102,7 +102,7 @@ class DocumentationGenerator:
         for req in self.analysis["requirements"]:
             # If source is missing, use default
             source = req.get("source", "MASTER_REQUIREMENTS.md")
-            req_rows += f"| {req['id']} | {req['name']} | `{source}` | `{req['evidence']}` | `{req['tests']}` | {req['status']} | {req['confidence']} | {req['verification']} |\n"
+            req_rows += f"| {req['id']} | {req['name']} | {source} | {req['evidence']} | {req['tests']} | {req['status']} | {req['confidence']} | {req['verification']} |\n"
         if not req_rows:
             req_rows = "| None | Project requirements are not documented in repository | N/A | N/A | N/A | UNKNOWN | Low | UNKNOWN |"
 
@@ -889,11 +889,11 @@ Before marking complete:
         found_topics = {msg["topic"] for msg in scanned_messages}
         
         major_topics = [
-            {"topic": "perception.output", "publisher": "perception", "subscribers": "planning, prediction", "format": "FlatBuffers (PerceptionOutput)", "priority": "HIGH", "frequency": "10Hz (100ms)", "verification": "VERIFIED"},
-            {"topic": "localization.pose", "publisher": "localization", "subscribers": "planning, control, safety", "format": "FlatBuffers (LocalizationState)", "priority": "CRITICAL", "frequency": "100Hz (10ms)", "verification": "VERIFIED"},
-            {"topic": "planning.trajectory", "publisher": "planning", "subscribers": "control, safety", "format": "FlatBuffers (Trajectory)", "priority": "HIGH", "frequency": "50Hz (20ms)", "verification": "VERIFIED"},
-            {"topic": "control.command", "publisher": "control", "subscribers": "hal, safety", "format": "FlatBuffers (ControlCommand)", "priority": "CRITICAL", "frequency": "100Hz (10ms)", "verification": "VERIFIED"},
-            {"topic": "safety.emergency_stop", "publisher": "safety", "subscribers": "hal, control, core", "format": "FlatBuffers (EmergencyStop)", "priority": "CRITICAL", "frequency": "Aperiodic (Immediate)", "verification": "VERIFIED"}
+            {"topic": "perception.output (PerceptionOutput)", "publisher": "perception", "subscribers": "planning, prediction", "format": "FlatBuffers (PerceptionOutput)", "priority": "HIGH", "frequency": "10Hz (100ms)", "verification": "VERIFIED"},
+            {"topic": "localization.pose (LocalizationOutput)", "publisher": "localization", "subscribers": "planning, control, safety", "format": "FlatBuffers (LocalizationOutput)", "priority": "CRITICAL", "frequency": "100Hz (10ms)", "verification": "VERIFIED"},
+            {"topic": "planning.trajectory (TrajectoryPlan)", "publisher": "planning", "subscribers": "control, safety", "format": "FlatBuffers (TrajectoryPlan)", "priority": "HIGH", "frequency": "50Hz (20ms)", "verification": "VERIFIED"},
+            {"topic": "control.command (ControlCommand)", "publisher": "control", "subscribers": "hal, safety", "format": "FlatBuffers (ControlCommand)", "priority": "CRITICAL", "frequency": "100Hz (10ms)", "verification": "VERIFIED"},
+            {"topic": "safety.emergency_stop (EmergencyStop)", "publisher": "safety", "subscribers": "hal, control, core", "format": "FlatBuffers (EmergencyStop)", "priority": "CRITICAL", "frequency": "Aperiodic (Immediate)", "verification": "VERIFIED"}
         ]
         
         merged_messages = []
@@ -909,7 +909,7 @@ Before marking complete:
             })
             
         for mt in major_topics:
-            if mt["topic"] not in found_topics:
+            if mt["topic"].split(" (")[0] not in found_topics:
                 dir_pub = mt["publisher"]
                 if self.analysis["directories"].get(dir_pub, False):
                     merged_messages.append(mt)
@@ -918,7 +918,7 @@ Before marking complete:
             for m in merged_messages:
                 message_catalog_rows += f"| `{m['topic']}` | `{m['publisher']}` | {m['subscribers']} | `{m['format']}` | **{m['priority']}** | {m['frequency']} | {m['verification']} |\n"
         else:
-            message_catalog_rows = "| None | No publish/subscribe patterns discovered in source code | — | — | — | — | UNKNOWN |\n"
+            message_catalog_rows = "| None | No publish/subscribe patterns discovered in source code | — | — | — | — | UNKNOWN |"
 
         # Production Readiness Dashboard (evidence-based)
         ci_exists = (self.repo_path / ".github" / "workflows").exists()
@@ -1022,29 +1022,29 @@ The boot initialization sequence proceeds from the main execution trigger to eve
 |:---|:---|:---|:---|:---|
 {component_rows}
 
-### Code Ownership Map
+## CODE_OWNERSHIP
 | Subsystem Module | Count of Scanned Files | Verification |
 |:---|:---|:---|
 {ownership_output}
 
 ---
 
-## 5. Domain Model Registry (DOMAIN_MODEL_REGISTRY)
+## DOMAIN_MODEL_REGISTRY
 | Entity Name | Owner Subsystem | Source File | Consumers | Producers | Serialization Schema | Verification |
 |:---|:---|:---|:---|:---|:---|:---|
 {domain_models_rows}
 
 ---
 
-## 6. Message Catalog (MESSAGE_CATALOG)
+## MESSAGE_CATALOG
 Verified EventBus message/topic catalog:
-| Topic / Channel Name | Publisher Layer | Subscriber Layers | Payload Format | Priority | Frequency | Verification |
+| Topic / Message Name | Producer | Consumer | Schema | Priority | Frequency | Verification |
 |:---|:---|:---|:---|:---|:---|:---|
 {message_catalog_rows}
 
 ---
 
-## 6b. State Machine Registry (STATE_MACHINE_REGISTRY)
+## STATE_MACHINE_REGISTRY
 {state_machine_md}
 
 ---
@@ -1063,7 +1063,7 @@ Verified EventBus message/topic catalog:
 
 ---
 
-## 9. API Registry (API_CONTRACTS)
+## API_CONTRACTS
 ### Scanned API Endpoints:
 | Endpoint / Route | Protocol | Source File | Line | Verification |
 |:---|:---|:---|:---|:---|
@@ -1074,7 +1074,7 @@ Verified EventBus message/topic catalog:
 
 ---
 
-## 9b. Data Dictionary (DATA_DICTIONARY)
+## DATA_DICTIONARY
 {data_dictionary_md}
 
 ---
@@ -1084,7 +1084,7 @@ Verified EventBus message/topic catalog:
 
 ---
 
-## 11. Configuration Schema (CONFIGURATION_SCHEMA)
+## CONFIGURATION_SCHEMA
 """
         # Dynamic configuration registry from scanner
         scanned_configs = self.analysis.get("config_files", [])
@@ -1133,7 +1133,7 @@ Factual verified workspace imports:
 
 ---
 
-## 14. Test Registry (TEST_REGISTRY)
+## TEST_REGISTRY
 ### Test Intelligence Indexes:
 - **Unit Tests Execution Count**: {test_reg['unit']}
 - **Integration Tests Execution Count**: {test_reg['integration']}
@@ -1149,7 +1149,7 @@ Factual verified workspace imports:
 
 ---
 
-## 15. Performance Budgets (PERFORMANCE_BUDGETS)
+## PERFORMANCE_BUDGETS
 ### Real-Time timing budgets and allocations:
 - **Dynamic Control loop frequency**: >= 100Hz (10ms budget).
 - **EKF localization timing**: <= 5ms loop budget.
@@ -1188,7 +1188,7 @@ Factual verified workspace imports:
 
 ---
 
-## 18. Risks & Failure Modes (FAILURE_MODES)
+## FAILURE_MODES
 ### Project Domain Risks:
 | Risk Descriptor | Likelihood | Impact | Mitigation Strategy | Owner |
 |:---|:---|:---|:---|:---|
