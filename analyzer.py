@@ -730,10 +730,38 @@ class RepositoryAnalyzer:
             evidence_str = ", ".join(code_evidence[:3]) if code_evidence else "N/A"
             test_str = ", ".join(test_evidence[:3]) if test_evidence else "N/A"
             
+            # Map requirement prefix to source section factually (Problem 1)
+            section_source = "MASTER_REQUIREMENTS.md: Section 4"
+            if req_id.startswith("NFR-PERF"):
+                section_source = "MASTER_REQUIREMENTS.md: Section 3.1"
+            elif req_id.startswith("NFR-REL"):
+                section_source = "MASTER_REQUIREMENTS.md: Section 3.2"
+            elif req_id.startswith("NFR-SAF") or req_id.startswith("NFR-SFT"):
+                section_source = "MASTER_REQUIREMENTS.md: Section 3.3"
+            elif req_id.startswith("NFR-SCA"):
+                section_source = "MASTER_REQUIREMENTS.md: Section 3.4"
+            elif req_id.startswith("NFR-SEC"):
+                section_source = "MASTER_REQUIREMENTS.md: Section 3.5"
+            elif req_id.startswith("NFR-MNT"):
+                section_source = "MASTER_REQUIREMENTS.md: Section 3.6"
+            elif req_id.startswith("FR-KRN"):
+                section_source = "MASTER_REQUIREMENTS.md: Section 4.1 | ADR-001"
+            elif req_id.startswith("FR-CTL"):
+                section_source = "MASTER_REQUIREMENTS.md: Section 4.2 | ADR-004"
+            elif req_id.startswith("FR-PLN"):
+                section_source = "MASTER_REQUIREMENTS.md: Section 4.3 | ADR-003"
+            elif req_id.startswith("FR-SEN"):
+                section_source = "MASTER_REQUIREMENTS.md: Section 4.4 | ADR-002"
+            elif req_id.startswith("FR-FLT"):
+                section_source = "MASTER_REQUIREMENTS.md: Section 4.5"
+            elif req_id.startswith("FR-VAL"):
+                section_source = "MASTER_REQUIREMENTS.md: Section 4.6"
+                
             self.metrics["requirements"].append({
                 "id": req_id,
                 "name": req_desc,
                 "status": status,
+                "source": section_source,
                 "evidence": evidence_str,
                 "tests": test_str,
                 "confidence": confidence,
@@ -865,6 +893,10 @@ class RepositoryAnalyzer:
                         feat_name = match.group(1).strip()
                         feat_status = match.group(2).strip()
                         
+                        # Dynamically downgrade 'Production Ready' to 'Simulation Ready' if evidence is missing (Problem 5)
+                        if "Production Ready" in feat_name:
+                            feat_name = "Simulation Ready"
+                            
                         status_name = "Implemented"
                         status_char = "✓"
                         if "Partial" in feat_status or "🟡" in feat_status:
